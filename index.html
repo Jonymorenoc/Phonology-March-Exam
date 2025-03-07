@@ -539,7 +539,7 @@
      * Exam Data
      *************************************************************/
     const exam = {
-      // SECTION 1 - letter selection (still has emojis)
+      // SECTION 1 - letter selection (with item-based emojis)
       fillInTheBlanks: {
         title: "Section 1: Fill in the Blanks",
         tip: "💡 Tip: Select the letters in the correct order to form the missing word. Watch out for extra letters that don't belong!",
@@ -568,7 +568,7 @@
         ]
       },
 
-      // SECTION 2 - rhymes (unchanged)
+      // SECTION 2 - rhymes
       rhymes: {
         title: "Section 2: Which Word Rhymes With…",
         tip: "💡 Tip: Listen to the sound of the word and choose the option that best rhymes.",
@@ -597,7 +597,7 @@
         ]
       },
 
-      // SECTION 3 - circle and write (unchanged)
+      // SECTION 3 - circle and write
       circleAndWrite: {
         title: "Section 3: Circle and Write the Word",
         tip: "💡 Tip: Choose the correct word from the options and write it clearly in the blank.",
@@ -626,7 +626,7 @@
         ]
       },
 
-      // SECTION 4 - multi-selection, but NO emojis in the question text
+      // SECTION 4 - multi-selection (no emojis in question text)
       phonicsSpelling: {
         title: "Section 4: Phonics and Spelling Patterns",
         tip: "💡 Tip: Focus on the sounds and spellings. Use each vocabulary word to answer the questions.",
@@ -739,7 +739,7 @@
         ]
       },
 
-      // SECTION 5 - dictation
+      // SECTION 5 - dictation with new sentences
       dictation: {
         title: "Section 5: Dictation",
         tip: "💡 Tip: Read the sentence carefully and practice writing it down correctly. Click 'Choose Random Text' to get a new sentence."
@@ -757,31 +757,81 @@
       return array;
     }
 
-    // Fallback emojis for the menu button headings, etc.
+    // Fallback emojis for menu button headings
     const fallbackEmojis = ["😊", "👍", "🌟", "🎉", "💡", "🚀"];
 
     /*************************************************************
      * Generate a Random Dictation Sentence (Section 5)
      *************************************************************/
     function generateDictationText() {
-      const vocabWords = [...allVocabulary];
-      shuffleArray(vocabWords);
-      // pick 2 distinct words
-      const pair = vocabWords.slice(0, 2);
-      const templates = [
-        "We discovered a {0} hiding next to the {1} during art class.",
-        "Our teacher explained how a {0} might help us use the {1} properly.",
-        "During recess, a {0} and a {1} became an unexpected pair!",
-        "They showed us a {0} that worked nicely with a {1} in science lab.",
-        "After reading time, we placed the {0} on the same shelf as the {1}.",
-        "The library had a display featuring a {0} and a {1} side by side.",
-        "No one guessed a {0} could stay so close to a {1} for so long.",
-        "We drew pictures of the {0} along with the {1} for our bulletin board.",
-        "Our class project involved comparing a {0} to a {1} in a fun story.",
-        "He was amazed to learn how a {0} could fit inside a {1} so easily!"
+      const dictationSentences = [
+        "The cowboy tipped his hat to the baker selling pie at the fair.",
+        "A ghostly figure floated near the old wooden jar of oil.",
+        "She stirred the stew with a spoon while reading a book.",
+        "He slipped on ice and left a muddy footprint on the path.",
+        "The cook prepared five spicy dishes for the food festival.",
+        "They launched a toy jet into the sky under the full moon.",
+        "A rusty coin was hidden inside the dusty cookbook.",
+        "She wrapped the gift in paper decorated with tiny ghosts.",
+        "The librarian placed a big jar of bookmarks on the counter.",
+        "He carved a wooden spoon as a gift for his grandmother.",
+        "The cowboy’s jacket had patches from every town he visited.",
+        "Children played a game to find coins buried in the sand.",
+        "The spilled oil stained his favorite tie beyond repair.",
+        "They roasted marshmallows over a fire made of dry wood.",
+        "A big moon illuminated the trail as they hiked at night.",
+        "She packed a jar of homemade pie filling for the picnic.",
+        "The pilot’s jacket was found crumpled inside the crashed jet.",
+        "He balanced a coin on his foot during the silly game.",
+        "The ghost story mentioned a treasure hidden under ice.",
+        "Five pies cooled on the windowsill, tempting passersby.",
+        "They used a spoon to dig for buried treasure in the sand.",
+        "The recipe required five cups of flour and a jar of oil.",
+        "A leather-bound book was the perfect gift for the teacher.",
+        "The cowboy’s boot left a deep imprint in the soft mud.",
+        "She wore a tie dyed with colors resembling the northern lights.",
+        "A big jar of pickles sat beside the loaf of bread.",
+        "The ice sculpture melted into a puddle shaped like a foot.",
+        "They played a board game with pieces carved from wood.",
+        "The chef used a spoon to drizzle oil over the salad.",
+        "He found an old coin while flipping through the cookbook.",
+        "The jet soared past the moon, leaving a trail of clouds.",
+        "A ghostly whisper echoed through the empty food pantry.",
+        "She tied the gift box with ribbon and a sprig of pine.",
+        "The cookbook featured a recipe for ice cream made with oil.",
+        "He wore a jacket lined with pockets for coins and keys.",
+        "The cowboy’s horse knocked over a jar of apple cider.",
+        "They built a fire using wood and lit it with a magnifying glass.",
+        "A big spoon was used to serve the hearty beef stew.",
+        "The children pretended the moon was made of blue cheese.",
+        "She painted a ghost holding a jar of glowing fireflies.",
+        "He polished his leather boots until they shone like jet.",
+        "The librarian stamped the due date inside each borrowed book.",
+        "They played hide-and-seek among the big trees in the forest.",
+        "A coin-operated machine dispensed tiny toys for five cents.",
+        "The ice cubes clinked in the glass as she read her book.",
+        "He donated a warm jacket and a pair of gloves to the shelter.",
+        "The cowboy’s lasso looped around a barrel labeled “oil.”",
+        "She balanced a spoon on her nose during the comedy game.",
+        "The ghost story scared him so much he spilled his food.",
+        "They carved a wooden spoon as a gift for the newlyweds.",
+        "Five jets flew in formation under the bright afternoon sun.",
+        "The jar of honey tipped over, dripping onto the cookbook.",
+        "He tied the package with twine and a sprig of lavender.",
+        "The full moon cast shadows on the old wooden footbridge.",
+        "A coin-shaped pendant hung from her necklace as a good luck charm.",
+        "The cowboy’s hat flew off in the gust from the jet engine.",
+        "She used a spoon to mix oil into the cake batter.",
+        "The librarian shelved a book about ice ages next to cookbooks.",
+        "A big jar of coins sat on the counter for charity.",
+        "The children played a game pretending to chase a ghost.",
+        "He warmed his hands by the fire, holding a mug of food.",
+        "The ice cubes melted into the shape of a tiny foot.",
+        "She wrapped the pie in foil to keep it warm for the cook.",
+        "The cowboy’s jacket had a patch shaped like a crescent moon."
       ];
-      const template = templates[Math.floor(Math.random() * templates.length)];
-      return template.replace("{0}", pair[0]).replace("{1}", pair[1]);
+      shuffleArray(dictationSentences);
+      return dictationSentences[0];
     }
 
     /*************************************************************
@@ -854,7 +904,6 @@
       // Shuffle the exercises for random order
       shuffleArray(sectionData.exercises);
     
-      // Build out the lesson content
       lessonSection.innerHTML = `
         <button class="back-btn">⬅️ Back</button>
         <h2>${sectionData.title} ${fallbackEmojis[Math.floor(Math.random() * fallbackEmojis.length)]}</h2>
@@ -865,12 +914,10 @@
               
               // SECTION 1 => show item-based emoji
               if (sectionKey === "fillInTheBlanks") {
-                // single correct answer
                 const word = ex.a.toLowerCase();
                 if (vocabEmojis[word]) {
                   showEmoji = vocabEmojis[word];
-                }
-                else {
+                } else {
                   showEmoji = "";
                 }
               }
@@ -878,12 +925,11 @@
               else if (sectionKey === "phonicsSpelling") {
                 showEmoji = "";
               }
-              // SECTION 2, 3 => no item-based emojis (we do fallback or nothing).
+              // SECTION 2, 3 => no item-based emojis
               else if (sectionKey === "rhymes" || sectionKey === "circleAndWrite") {
                 showEmoji = "";
               }
-
-              // Build the question layout
+    
               if (ex.t === "letters") {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
@@ -938,7 +984,6 @@
         </div>
       `;
     
-      // Back button
       document.querySelector(".back-btn").addEventListener("click", () => {
         lessonSection.classList.remove("active");
         lessonSection.style.display = "none";
@@ -955,7 +1000,7 @@
     function attachExerciseListeners(sectionKey) {
       const sectionData = exam[sectionKey];
       const lessonSection = document.querySelector(".lesson-section");
-
+    
       // SECTION 1: letter selection
       if (sectionKey === "fillInTheBlanks") {
         const letterExercises = lessonSection.querySelectorAll(".exercise-card");
@@ -981,7 +1026,7 @@
             }
             const letterPool = [...correctLetters, ...trapLetters];
             shuffleArray(letterPool);
-
+    
             let nextLetterIndex = 0;
             
             letterPool.forEach(letter => {
@@ -1015,8 +1060,8 @@
           }
         });
       }
-
-      // SECTION 4: multi-selection (no emojis in question text)
+    
+      // SECTION 4: multi-selection
       if (sectionKey === "phonicsSpelling") {
         const multiExercises = lessonSection.querySelectorAll(".exercise-card");
         multiExercises.forEach(card => {
@@ -1026,16 +1071,15 @@
             const grid = card.querySelector(".multiselect-grid");
             const feedback = card.querySelector(".feedback");
             const submitBtn = card.querySelector(".submit-btn");
-
-            // Up to 6 possible answers (correct answers + trap words)
+    
             const correctAnswers = Array.isArray(exData.a) ? exData.a : [exData.a];
             const numberOfTrapsToAdd = Math.max(0, 6 - correctAnswers.length); 
             shuffleArray(trapWords);
             const chosenTraps = trapWords.slice(0, numberOfTrapsToAdd);
-
+    
             const possibleAnswers = [...correctAnswers, ...chosenTraps];
             shuffleArray(possibleAnswers);
-
+    
             possibleAnswers.forEach(word => {
               const itemDiv = document.createElement("div");
               itemDiv.classList.add("multiselect-item");
@@ -1052,14 +1096,14 @@
               });
               grid.appendChild(itemDiv);
             });
-
+    
             submitBtn.addEventListener("click", () => {
               const checkedBoxes = grid.querySelectorAll("input[type='checkbox']:checked");
               const selectedWords = Array.from(checkedBoxes).map(cb => cb.value);
-
+    
               const correctSet = new Set(correctAnswers);
               const selectedSet = new Set(selectedWords);
-
+    
               let isCorrect = (correctSet.size === selectedSet.size);
               if (isCorrect) {
                 for (let word of correctSet) {
@@ -1069,7 +1113,7 @@
                   }
                 }
               }
-
+    
               feedback.style.display = "block";
               if (isCorrect) {
                 feedback.innerHTML = `✅ Correct! Good job.`;
@@ -1095,7 +1139,7 @@
           }
         });
       }
-
+    
       // SECTION 2 & 3: multiple-choice approach
       lessonSection.querySelectorAll(".option-btn").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -1130,8 +1174,8 @@
           }
         });
       });
-
-      // Text input approach (if any)
+    
+      // Text input approach
       lessonSection.querySelectorAll(".submit-btn").forEach(btn => {
         const exerciseCard = btn.closest(".exercise-card");
         if (exerciseCard && exerciseCard.querySelector(".text-input")) {

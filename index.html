@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Second Grade Vocabulary Exam</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Inline Styles (same style as before) -->
+  <style>
+    :root {
+      --primary: #2A4270; /* Dark Blue */
+      --secondary: #FF693A; /* Bright Orange */
+      --accent: #FF693A;
+      --background: #F6F4EE;
+      --text-dark: #000000;
+      --text-light: #FFFFFF;
+      --button-hover: #FF5722;
+      --button-active: #E64A19;
+      --feedback-correct: #C8F7C5;
+      --feedback-incorrect: #FFD8D2;
+      --feedback-border-correct: #2ECC71;
+      --feedback-border-incorrect: #E74C3C;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: var(--background);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background-color: var(--primary);
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: var(--text-light);
+      font-size: 2.5rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .emoji-header {
+      font-size: 2.5rem;
+      margin: 1rem 0;
+      animation: bounce 2s infinite;
+    }
+    
+    /* “Choose Your Section!” Bubble */
+    .bubble {
+      background: rgba(255, 105, 58, 0.1);
+      border: 2px solid var(--secondary);
+      padding: 1rem 1.5rem;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-size: 1.2rem;
+      color: var(--text-dark);
+      width: 80%;
+      max-width: 600px;
+    }
+    
+    /* Section Buttons Grid */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      padding: 1rem;
+    }
+    
+    .menu-btn {
+      background: var(--primary);
+      border: none;
+      border-radius: 10px;
+      padding: 1.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-light);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .menu-btn:hover {
+      background: var(--button-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .menu-btn:active {
+      background: var(--button-active);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .lesson-section {
+      display: none;
+      padding: 2rem;
+      background: #FFFFFF;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .exercise-card {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: #FFFFFF;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 1px solid #e0e0e0;
+      transition: transform 0.2s;
+    }
+    
+    .exercise-card:hover {
+      transform: scale(1.01);
+    }
+    
+    .exercise-card::before {
+      content: "✨";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      font-size: 1.2rem;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .option-btn {
+      padding: 0.8rem;
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+      font-size: 1rem;
+      text-align: center;
+      color: var(--text-dark);
+    }
+    
+    .option-btn:hover:not(:disabled) {
+      background: var(--secondary);
+      color: var(--text-light);
+    }
+    
+    .option-btn:disabled {
+      cursor: default;
+      opacity: 0.6;
+    }
+    
+    .text-input, textarea {
+      padding: 0.8rem;
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 100%;
+      color: var(--text-dark);
+    }
+    
+    .submit-btn {
+      margin-top: 0.5rem;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--secondary);
+      color: var(--text-light);
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      font-size: 1rem;
+    }
+    
+    .submit-btn:hover:not(:disabled) {
+      background: var(--button-hover);
+      transform: translateY(-2px);
+    }
+    
+    .submit-btn:active {
+      background: var(--button-active);
+      transform: translateY(0);
+    }
+    
+    .submit-btn:disabled {
+      cursor: default;
+      opacity: 0.6;
+    }
+    
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      animation: popIn 0.3s ease;
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    .feedback.correct {
+      background: var(--feedback-correct);
+      border: 2px solid var(--feedback-border-correct);
+      color: var(--text-dark);
+    }
+    
+    .feedback.incorrect {
+      background: var(--feedback-incorrect);
+      border: 2px solid var(--feedback-border-incorrect);
+      color: var(--text-dark);
+    }
+    
+    .try-again-btn {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--secondary);
+      color: var(--text-light);
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    .try-again-btn:hover {
+      background: var(--button-hover);
+    }
+    
+    .explanation {
+      background: #FFFFFF;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 5px solid var(--secondary);
+      color: var(--text-dark);
+    }
+    
+    .back-btn {
+      background: var(--secondary);
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      transition: background 0.3s ease, transform 0.2s ease;
+      font-size: 1rem;
+      color: var(--text-light);
+    }
+    
+    .back-btn:hover {
+      background: var(--button-hover);
+      transform: translateY(-2px);
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: var(--primary);
+      border-radius: 15px;
+      color: var(--text-light);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    /* TIP Panel at Bottom */
+    .tip-panel {
+      position: fixed;
+      left: 0; 
+      right: 0;
+      bottom: 0;
+      background-color: #fff;
+      border-top: 3px solid var(--secondary);
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.15);
+      z-index: 9999;
+      transition: max-height 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .tip-panel.closed {
+      max-height: 40px;
+    }
+    
+    .tip-panel.open {
+      max-height: 200px;
+    }
+    
+    .tip-toggle-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--secondary);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    
+    .tip-content {
+      padding: 1rem;
+      background: #fff;
+      color: var(--text-dark);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .menu-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      
+      .menu-btn {
+        padding: 1rem;
+        min-height: 80px;
+        font-size: 1rem;
+      }
+      
+      .emoji-header {
+        font-size: 2.5rem;
+      }
+      
+      .bubble {
+        font-size: 1rem;
+        width: 90%;
+      }
+      
+      .option-btn, .word-btn {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+        margin: 0.3rem;
+      }
+      
+      .text-input, textarea {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+      }
+      
+      .submit-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
+      }
+      
+      .try-again-btn {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.7rem;
+      }
+      
+      .exercise-card {
+        padding: 1rem;
+      }
+      
+      .back-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .tip-panel.closed {
+        max-height: 35px;
+      }
+      .tip-panel.open {
+        max-height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Second Grade Vocabulary Exam</h1>
+      <div class="emoji-header">📝📚</div>
+    </header>
+
+    <main class="content">
+      <!-- Welcome / Menu Section -->
+      <section class="welcome active">
+        <div class="bubble">🎈 Choose Your Exam Section! 👇</div>
+        <div class="menu-grid">
+          <!-- Buttons generated from exam sections -->
+        </div>
+      </section>
+
+      <!-- Exam Section Details -->
+      <section class="lesson-section"></section>
+    </main>
+
+    <footer>
+      <p>Created for Second Grade by Your Teacher</p>
+    </footer>
+  </div>
+
+  <!-- Collapsible Tip Panel (if needed) -->
+  <div id="tip-panel" class="tip-panel closed">
+    <div class="tip-toggle-bar" id="tip-toggle-bar">
+      <span id="tip-toggle-text">Show Tip</span>
+    </div>
+    <div class="tip-content" id="tip-content">
+      <!-- Tip content injected via script if necessary -->
+    </div>
+  </div>
+
+  <!-- Inline Script -->
+  <script>
+    /*************************************************************
+     * Exam Data (5 Sections with 21 exercises each, where applicable)
+     *************************************************************/
+    const exam = {
+      fillInTheBlanks: {
+        title: "Section 1: Fill in the Blanks",
+        explanation: `<div class="explanation">
+          <h3>Fill in the Blanks</h3>
+          <p>Fill in each blank with the correct word. Use each word exactly once.</p>
+        </div>`,
+        exercises: [
+          { q: "1. He paid with a shiny ______ to buy a snack.", t: "text", a: "coin" },
+          { q: "2. The brave ______ rode his horse through the desert.", t: "text", a: "cowboy" },
+          { q: "3. She baked a delicious ______ for dessert.", t: "text", a: "pie" },
+          { q: "4. He wore a fancy ______ around his neck at the wedding.", t: "text", a: "tie" },
+          { q: "5. Please put the ______ in the freezer so it stays cold.", t: "text", a: "ice" },
+          { q: "6. She used to ______ the vegetables.", t: "text", a: "fry" },
+          { q: "7. My little sister just turned ______ years old.", t: "text", a: "five" },
+          { q: "8. We kept the homemade jam in a glass ______.", t: "text", a: "jar" },
+          { q: "9. It was cold outside, so she wore her ______.", t: "text", a: "jacket" },
+          { q: "10. He wrapped the ______ for his friend’s birthday.", t: "text", a: "gift" },
+          { q: "11. They told a spooky story about a wandering ______.", t: "text", a: "ghost" },
+          { q: "12. We played a fun board ______ after dinner.", t: "text", a: "game" },
+          { q: "13. That dog is quite ______ compared to the puppy.", t: "text", a: "big" },
+          { q: "14. The ______ sped down the runway and took off.", t: "text", a: "jet" },
+          { q: "15. I read a ______ before going to sleep.", t: "text", a: "book" },
+          { q: "16. My dad loves to ______ pancakes for breakfast.", t: "text", a: "cook" },
+          { q: "17. The house was built with sturdy ______.", t: "text", a: "wood" },
+          { q: "18. The ______ shone brightly in the night sky.", t: "text", a: "moon" },
+          { q: "19. She stirred her soup with a large ______.", t: "text", a: "spoon" },
+          { q: "20. We bought fresh ______ at the grocery store.", t: "text", a: "food" },
+          { q: "21. After running all day, my ______ began to ache.", t: "text", a: "foot" },
+        ]
+      },
+
+      rhymes: {
+        title: "Section 2: Which Word Rhymes With…",
+        explanation: `<div class="explanation">
+          <h3>Rhyming Words</h3>
+          <p>Choose the correct word that best rhymes with the given word. Each vocabulary word is used once.</p>
+        </div>`,
+        exercises: [
+          { q: '1. Which word rhymes with "join"?', o: ["pie", "coin", "cook"], a: "coin" },
+          { q: '2. Which word rhymes with "toy"?', o: ["cowboy", "foot", "jar"], a: "cowboy" },
+          { q: '3. Which word rhymes with "sky"?', o: ["tie", "oil", "book"], a: "tie" },
+          { q: '4. Which word rhymes with "why"?', o: ["ghost", "pie", "big"], a: "pie" },
+          { q: '5. Which word rhymes with "mice"?', o: ["ice", "spoon", "five"], a: "ice" },
+          { q: '6. Which word rhymes with "boil"?', o: ["jet", "oil", "cook"], a: "oil" },
+          { q: '7. Which word rhymes with "hive"?', o: ["gift", "five", "game"], a: "five" },
+          { q: '8. Which word rhymes with "car"?', o: ["jar", "cowboy", "moon"], a: "jar" },
+          { q: '9. Which word rhymes with "packet"?', o: ["jacket", "foot", "wood"], a: "jacket" },
+          { q: '10. Which word rhymes with "lift"?', o: ["gift", "ghost", "oil"], a: "gift" },
+          { q: '11. Which word rhymes with "most"?', o: ["spoon", "ghost", "food"], a: "ghost" },
+          { q: '12. Which word rhymes with "same"?', o: ["five", "game", "big"], a: "game" },
+          { q: '13. Which word rhymes with "dig"?', o: ["big", "tie", "coin"], a: "big" },
+          { q: '14. Which word rhymes with "bet"?', o: ["cowboy", "jet", "foot"], a: "jet" },
+          { q: '15. Which word rhymes with "look"?', o: ["book", "spoon", "moon"], a: "book" },
+          { q: '16. Which word rhymes with "shook"?', o: ["cook", "pie", "jacket"], a: "cook" },
+          { q: '17. Which word rhymes with "could"?', o: ["wood", "coin", "oil"], a: "wood" },
+          { q: '18. Which word rhymes with "tune"?', o: ["tie", "cowboy", "moon"], a: "moon" },
+          { q: '19. Which word rhymes with "balloon"?', o: ["spoon", "jar", "big"], a: "spoon" },
+          { q: '20. Which word rhymes with "mood"?', o: ["food", "foot", "game"], a: "food" },
+          { q: '21. Which word rhymes with "put"?', o: ["foot", "ghost", "five"], a: "foot" },
+        ]
+      },
+
+      circleAndWrite: {
+        title: "Section 3: Circle and Write the Word",
+        explanation: `<div class="explanation">
+          <h3>Circle and Write</h3>
+          <p>Choose the correct word from (a), (b), or (c) then write it in the blank.</p>
+        </div>`,
+        exercises: [
+          { q: "1. He dropped a small ______ into the fountain.", o: ["cowboy", "coin", "game"], a: "coin" },
+          { q: "2. My cousin wants to be a ______ and ride horses.", o: ["cowboy", "jet", "jar"], a: "cowboy" },
+          { q: "3. She baked a delicious cherry ______ for dessert.", o: ["gift", "pie", "oil"], a: "pie" },
+          { q: "4. He wore a ______ with his shirt for the wedding.", o: ["tie", "ghost", "moon"], a: "tie" },
+          { q: "5. Put the ______ in the freezer before it melts.", o: ["food", "spoon", "ice"], a: "ice" },
+          { q: "6. She added a little ______ to the pan before cooking.", o: ["oil", "foot", "wood"], a: "oil" },
+          { q: "7. He just turned ______ years old today.", o: ["big", "five", "cook"], a: "five" },
+          { q: "8. We kept sugar cookies in a ceramic ______.", o: ["jar", "jacket", "foot"], a: "jar" },
+          { q: "9. It was so cold that she wore her thick ______.", o: ["foot", "jacket", "tie"], a: "jacket" },
+          { q: "10. He wrapped the ______ with bright paper and a bow.", o: ["gift", "jet", "cowboy"], a: "gift" },
+          { q: "11. The old house was said to have a friendly ______.", o: ["game", "book", "ghost"], a: "ghost" },
+          { q: "12. We played a new board ______ last night.", o: ["game", "foot", "oil"], a: "game" },
+          { q: "13. That elephant is very ______ compared to a cat.", o: ["big", "five", "pie"], a: "big" },
+          { q: "14. The ______ roared down the runway before takeoff.", o: ["spoon", "jet", "ghost"], a: "jet" },
+          { q: "15. He read a good ______ about animals.", o: ["coin", "foot", "book"], a: "book" },
+          { q: "16. Mom likes to ______ pancakes for breakfast.", o: ["cook", "jar", "cowboy"], a: "cook" },
+          { q: "17. The table was made of solid ______.", o: ["wood", "moon", "big"], a: "wood" },
+          { q: "18. The ______ shone brightly in the sky last night.", o: ["spoon", "jacket", "moon"], a: "moon" },
+          { q: "19. He stirred the soup with a wooden ______.", o: ["spoon", "foot", "game"], a: "spoon" },
+          { q: "20. We bought some ______ at the market for dinner.", o: ["foot", "food", "ghost"], a: "food" },
+          { q: "21. My ______ hurts after walking all day.", o: ["foot", "tie", "cook"], a: "foot" },
+        ]
+      },
+
+      phonicsSpelling: {
+        title: "Section 4: Phonics and Spelling Patterns",
+        explanation: `<div class="explanation">
+          <h3>Phonics and Spelling Patterns</h3>
+          <p>Answer the questions below. Use each of the 21 words at least once.</p>
+        </div>`,
+        exercises: [
+          { q: "1. Which 3 words contain the short “oo” sound (as in “hook”)?", t: "text", a: "" },
+          { q: "2. Which 3 words contain the long “oo” sound (as in “boot”)?", t: "text", a: "" },
+          { q: "3. Which 2 words have the // sound spelled “oi”?", t: "text", a: "" },
+          { q: "4. Which 4 words end with a silent “e”?", t: "text", a: "" },
+          { q: "5. Which 3 words begin with the letters “j” or “ja”?", t: "text", a: "" },
+          { q: "6. Which 3 words begin with “co”?", t: "text", a: "" },
+          { q: "7. Which 2 words are typically used to stir or store things in the kitchen?", t: "text", a: "" },
+          { q: "8. Which word is a body part used for walking?", t: "text", a: "" },
+          { q: "9. Which word means a present or something you give someone?", t: "text", a: "" },
+          { q: "10. Which word is a sweet, round dessert often baked with fruit?", t: "text", a: "" },
+          { q: "11. Which word is the material from trees and is used for building?", t: "text", a: "" },
+          { q: "12. Which word refers to a spooky figure said to haunt houses?", t: "text", a: "" },
+          { q: "13. Which word is worn around your neck with a dress shirt?", t: "text", a: "" },
+          { q: "14. Which word refers to a large airplane?", t: "text", a: "" },
+          { q: "15. Which 2 words can describe something you read or do for fun? (One for reading, one for playing)", t: "text", a: "" },
+          { q: "16. Which word is used to prepare a meal?", t: "text", a: "" },
+          { q: "17. Which word is an amount of money made of metal?", t: "text", a: "" },
+          { q: "18. Which word is a type of job for a Western rider?", t: "text", a: "" },
+          { q: "19. Which word is a short word for “very large”?", t: "text", a: "" },
+          { q: "20. Which word can be a sweet frozen cube that melts in heat?", t: "text", a: "" },
+          { q: "21. Which word means “nourishment” or “things we eat”?", t: "text", a: "" },
+        ]
+      },
+
+      dictation: {
+        title: "Section 5: Dictation",
+        explanation: `<div class="explanation">
+          <h3>Dictation</h3>
+          <p>Your teacher will read 21 sentences, each containing one of the words. Listen carefully and write each sentence.</p>
+        </div>`,
+        exercises: [
+          { q: "1.", t: "textarea", a: "" },
+          { q: "2.", t: "textarea", a: "" },
+          { q: "3.", t: "textarea", a: "" },
+          { q: "4.", t: "textarea", a: "" },
+          { q: "5.", t: "textarea", a: "" },
+          { q: "6.", t: "textarea", a: "" },
+          { q: "7.", t: "textarea", a: "" },
+          { q: "8.", t: "textarea", a: "" },
+          { q: "9.", t: "textarea", a: "" },
+          { q: "10.", t: "textarea", a: "" },
+          { q: "11.", t: "textarea", a: "" },
+          { q: "12.", t: "textarea", a: "" },
+          { q: "13.", t: "textarea", a: "" },
+          { q: "14.", t: "textarea", a: "" },
+          { q: "15.", t: "textarea", a: "" },
+          { q: "16.", t: "textarea", a: "" },
+          { q: "17.", t: "textarea", a: "" },
+          { q: "18.", t: "textarea", a: "" },
+          { q: "19.", t: "textarea", a: "" },
+          { q: "20.", t: "textarea", a: "" },
+          { q: "21.", t: "textarea", a: "" },
+        ]
+      }
+    };
+
+    /*************************************************************
+     * Helper: Shuffle Array
+     *************************************************************/
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    /*************************************************************
+     * Initialize Menu
+     *************************************************************/
+    document.addEventListener("DOMContentLoaded", initMenu);
+    
+    function initMenu() {
+      const menuGrid = document.querySelector(".menu-grid");
+      menuGrid.innerHTML = "";
+      // Create a button for each exam section
+      for (let key in exam) {
+        const section = exam[key];
+        const button = document.createElement("button");
+        button.classList.add("menu-btn");
+        button.innerHTML = `<div style="text-align:center;">
+                              <div style="font-weight:bold;">${section.title}</div>
+                            </div>`;
+        button.setAttribute("data-section", key);
+        button.setAttribute("aria-label", section.title);
+        menuGrid.appendChild(button);
+      }
+      document.querySelectorAll(".menu-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          showSection(btn.getAttribute("data-section"));
+        });
+      });
+    }
+    
+    /*************************************************************
+     * Show a Section (Exam Lesson)
+     *************************************************************/
+    function showSection(sectionKey) {
+      const sectionData = exam[sectionKey];
+      const welcomeSection = document.querySelector(".welcome");
+      const lessonSection = document.querySelector(".lesson-section");
+    
+      welcomeSection.classList.remove("active");
+      lessonSection.classList.add("active");
+      lessonSection.style.display = "block";
+    
+      // Build exercises for the selected section
+      lessonSection.innerHTML = `
+        <button class="back-btn">⬅️ Back</button>
+        <h2>${sectionData.title}</h2>
+        ${sectionData.explanation || ""}
+        <div class="exercises">
+          ${sectionData.exercises.map((ex, idx) => {
+              // Multiple-choice exercise if options exist
+              if (ex.o) {
+                // Randomize options
+                shuffleArray(ex.o);
+                return `
+                  <div class="exercise-card" data-exercise-index="${idx}">
+                    <p>${ex.q}</p>
+                    <div class="options-grid">
+                      ${ex.o.map(opt => `<button class="option-btn" data-answer="${opt.toLowerCase()}">${opt}</button>`).join("")}
+                    </div>
+                    <div class="feedback" style="display:none;"></div>
+                  </div>
+                `;
+              }
+              // Text input exercise
+              else if (ex.t === "text") {
+                return `
+                  <div class="exercise-card" data-exercise-index="${idx}">
+                    <p>${ex.q}</p>
+                    <div class="options-grid">
+                      <input type="text" class="text-input" placeholder="Type your answer">
+                      <button class="submit-btn">Submit</button>
+                    </div>
+                    <div class="feedback" style="display:none;"></div>
+                  </div>
+                `;
+              }
+              // Textarea exercise (for Dictation)
+              else if (ex.t === "textarea") {
+                return `
+                  <div class="exercise-card" data-exercise-index="${idx}">
+                    <p>${ex.q}</p>
+                    <div class="options-grid">
+                      <textarea rows="3" placeholder="Type your answer here"></textarea>
+                      <button class="submit-btn">Submit</button>
+                    </div>
+                    <div class="feedback" style="display:none;"></div>
+                  </div>
+                `;
+              }
+              else {
+                return `
+                  <div class="exercise-card" data-exercise-index="${idx}">
+                    <p>${ex.q}</p>
+                    <div class="feedback" style="display:none;"></div>
+                  </div>
+                `;
+              }
+            }).join("")
+          }
+        </div>
+      `;
+    
+      // Back button returns to menu
+      document.querySelector(".back-btn").addEventListener("click", () => {
+        lessonSection.classList.remove("active");
+        lessonSection.style.display = "none";
+        welcomeSection.classList.add("active");
+        hideTipPanel();
+      });
+    
+      // For this exam, you may add tips (optional) or simply hide the tip panel
+      hideTipPanel();
+    
+      attachExerciseListeners(sectionKey);
+    }
+    
+    /*************************************************************
+     * Attach Listeners for All Exercises in a Section
+     *************************************************************/
+    function attachExerciseListeners(sectionKey) {
+      const sectionData = exam[sectionKey];
+      const lessonSection = document.querySelector(".lesson-section");
+    
+      // Multiple-choice listeners
+      lessonSection.querySelectorAll(".option-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const exerciseCard = btn.closest(".exercise-card");
+          const feedback = exerciseCard.querySelector(".feedback");
+          const exIndex = parseInt(exerciseCard.getAttribute("data-exercise-index"));
+          const exData = sectionData.exercises[exIndex];
+          const correctAnswer = exData.a.trim().toLowerCase();
+          const userAnswer = btn.dataset.answer.trim().toLowerCase();
+    
+          feedback.style.display = "block";
+          if (userAnswer === correctAnswer) {
+            feedback.innerHTML = `✅ Correct! 🎉`;
+            feedback.classList.add("correct");
+            feedback.classList.remove("incorrect");
+            exerciseCard.querySelectorAll(".option-btn").forEach(b => {
+              b.disabled = true;
+              b.style.opacity = "0.6";
+            });
+          } else {
+            feedback.innerHTML = `❌ Incorrect! The correct answer is: "${exData.a}".<br>
+              <button class="try-again-btn">Try Again</button>`;
+            feedback.classList.add("incorrect");
+            feedback.classList.remove("correct");
+            feedback.querySelector(".try-again-btn").addEventListener("click", () => {
+              feedback.style.display = "none";
+              exerciseCard.querySelectorAll(".option-btn").forEach(b => {
+                b.disabled = false;
+                b.style.opacity = "1";
+              });
+            });
+          }
+        });
+      });
+    
+      // Text input and Textarea listeners
+      lessonSection.querySelectorAll(".submit-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const exerciseCard = btn.closest(".exercise-card");
+          const feedback = exerciseCard.querySelector(".feedback");
+          let input = exerciseCard.querySelector(".text-input");
+          if (!input) {
+            input = exerciseCard.querySelector("textarea");
+          }
+          const exIndex = parseInt(exerciseCard.getAttribute("data-exercise-index"));
+          const exData = sectionData.exercises[exIndex];
+          const correctAnswer = exData.a.trim().toLowerCase();
+          const userAnswer = input.value.trim().toLowerCase();
+    
+          feedback.style.display = "block";
+          if (!userAnswer) {
+            feedback.innerHTML = "❗ Please type an answer.";
+            feedback.classList.add("incorrect");
+            feedback.classList.remove("correct");
+            return;
+          }
+    
+          if (userAnswer === correctAnswer) {
+            feedback.innerHTML = `✅ Correct! 🎉`;
+            feedback.classList.add("correct");
+            feedback.classList.remove("incorrect");
+            input.disabled = true;
+            btn.disabled = true;
+            input.style.opacity = "0.6";
+            btn.style.opacity = "0.6";
+          } else {
+            feedback.innerHTML = `❌ Incorrect! The correct answer is: "${exData.a}".<br>
+              <button class="try-again-btn">Try Again</button>`;
+            feedback.classList.add("incorrect");
+            feedback.classList.remove("correct");
+            feedback.querySelector(".try-again-btn").addEventListener("click", () => {
+              feedback.style.display = "none";
+              input.disabled = false;
+              btn.disabled = false;
+              input.style.opacity = "1";
+              btn.style.opacity = "1";
+              input.value = "";
+            });
+          }
+        });
+      });
+    }
+    
+    /*************************************************************
+     * Tip Panel Functions (optional for exam sections)
+     *************************************************************/
+    const tipPanel = document.getElementById("tip-panel");
+    const tipToggleBar = document.getElementById("tip-toggle-bar");
+    const tipToggleText = document.getElementById("tip-toggle-text");
+    const tipContent = document.getElementById("tip-content");
+    
+    function showTipPanel(contentHTML) {
+      tipPanel.classList.remove("open", "closed");
+      tipPanel.classList.add("closed");
+      tipPanel.style.display = "block";
+      tipContent.innerHTML = contentHTML;
+      tipToggleText.textContent = "Show Tip";
+      tipToggleBar.addEventListener("click", toggleTipPanel);
+    }
+    
+    function hideTipPanel() {
+      tipPanel.classList.remove("open", "closed");
+      tipPanel.style.display = "none";
+      tipToggleBar.removeEventListener("click", toggleTipPanel);
+    }
+    
+    function toggleTipPanel() {
+      if (tipPanel.classList.contains("closed")) {
+        tipPanel.classList.remove("closed");
+        tipPanel.classList.add("open");
+        tipToggleText.textContent = "Hide Tip";
+      } else {
+        tipPanel.classList.remove("open");
+        tipPanel.classList.add("closed");
+        tipToggleText.textContent = "Show Tip";
+      }
+    }
+  </script>
+</body>
+</html>

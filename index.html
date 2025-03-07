@@ -8,7 +8,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Inline Styles (Same design as before) -->
+  <!-- Inline Styles -->
   <style>
     :root {
       --primary: #2A4270;
@@ -148,6 +148,33 @@
       left: -10px;
       font-size: 1.2rem;
     }
+
+    /* For letter-selection in Section 1 */
+    .letters-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .letter-btn {
+      padding: 0.8rem;
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+      font-size: 1rem;
+      min-width: 40px;
+      text-align: center;
+    }
+    .letter-btn:hover:not(:disabled) {
+      background: var(--secondary);
+      color: var(--text-light);
+    }
+    .letter-btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
     
     .options-grid {
       display: grid;
@@ -176,6 +203,36 @@
     .option-btn:disabled {
       cursor: default;
       opacity: 0.6;
+    }
+
+    /* For multi-selection in Section 4 */
+    .multiselect-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .multiselect-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      padding: 0.5rem;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .multiselect-item input[type="checkbox"] {
+      cursor: pointer;
+    }
+    .multiselect-item:hover:not(.selected) {
+      background: var(--secondary);
+      color: var(--text-light);
+    }
+    .multiselect-item.selected {
+      background: var(--secondary);
+      color: var(--text-light);
     }
     
     .text-input,
@@ -366,7 +423,7 @@
         width: 90%;
       }
       
-      .option-btn, .word-btn {
+      .option-btn, .word-btn, .letter-btn {
         font-size: 0.9rem;
         padding: 0.6rem;
         margin: 0.3rem;
@@ -439,7 +496,7 @@
   <!-- Inline Script -->
   <script>
     /*************************************************************
-     * Vocabulary Emoji Mapping
+     * Vocabulary -> Emoji Mapping
      *************************************************************/
     const vocabEmojis = {
       'coin': '🪙',
@@ -466,39 +523,55 @@
     };
 
     /*************************************************************
-     * Exam Data with Tips and Dictation Texts
+     * All Vocabulary
+     *************************************************************/
+    const allVocabulary = [
+      "coin","cowboy","pie","tie","ice","oil","five","jar","jacket","gift",
+      "ghost","game","big","jet","book","cook","wood","moon","spoon","food","foot"
+    ];
+
+    /*************************************************************
+     * Trap words for Section 4 (max 3)
+     *************************************************************/
+    const trapWords = ["house","desk","ring"];
+
+    /*************************************************************
+     * Exam Data
      *************************************************************/
     const exam = {
+      // SECTION 1 - letter selection (still has emojis)
       fillInTheBlanks: {
         title: "Section 1: Fill in the Blanks",
-        tip: "💡 Tip: Read the sentence carefully and fill in the blank using context. Use each word exactly once.",
+        tip: "💡 Tip: Select the letters in the correct order to form the missing word. Watch out for extra letters that don't belong!",
         exercises: [
-          { q: "1. He paid with a shiny ______ to buy a snack.", t: "text", a: "coin" },
-          { q: "2. The brave ______ rode his horse through the desert.", t: "text", a: "cowboy" },
-          { q: "3. She baked a delicious ______ for dessert.", t: "text", a: "pie" },
-          { q: "4. He wore a fancy ______ around his neck at the wedding.", t: "text", a: "tie" },
-          { q: "5. Please put the ______ in the freezer so it stays cold.", t: "text", a: "ice" },
-          { q: "6. She used to ______ the vegetables.", t: "text", a: "fry" },
-          { q: "7. My little sister just turned ______ years old.", t: "text", a: "five" },
-          { q: "8. We kept the homemade jam in a glass ______.", t: "text", a: "jar" },
-          { q: "9. It was cold outside, so she wore her ______.", t: "text", a: "jacket" },
-          { q: "10. He wrapped the ______ for his friend’s birthday.", t: "text", a: "gift" },
-          { q: "11. They told a spooky story about a wandering ______.", t: "text", a: "ghost" },
-          { q: "12. We played a fun board ______ after dinner.", t: "text", a: "game" },
-          { q: "13. That dog is quite ______ compared to the puppy.", t: "text", a: "big" },
-          { q: "14. The ______ sped down the runway and took off.", t: "text", a: "jet" },
-          { q: "15. I read a ______ before going to sleep.", t: "text", a: "book" },
-          { q: "16. My dad loves to ______ pancakes for breakfast.", t: "text", a: "cook" },
-          { q: "17. The house was built with sturdy ______.", t: "text", a: "wood" },
-          { q: "18. The ______ shone brightly in the night sky.", t: "text", a: "moon" },
-          { q: "19. She stirred her soup with a large ______.", t: "text", a: "spoon" },
-          { q: "20. We bought fresh ______ at the grocery store.", t: "text", a: "food" },
-          { q: "21. After running all day, my ______ began to ache.", t: "text", a: "foot" }
+          { q: "He paid with a shiny ______ to buy a snack.", t: "letters", a: "coin" },
+          { q: "The brave ______ rode his horse through the desert.", t: "letters", a: "cowboy" },
+          { q: "She baked a delicious ______ for dessert.", t: "letters", a: "pie" },
+          { q: "He wore a fancy ______ around his neck at the wedding.", t: "letters", a: "tie" },
+          { q: "Please put the ______ in the freezer so it stays cold.", t: "letters", a: "ice" },
+          { q: "She used to ______ the vegetables.", t: "letters", a: "cook" },
+          { q: "My little sister just turned ______ years old.", t: "letters", a: "five" },
+          { q: "We kept the homemade jam in a glass ______.", t: "letters", a: "jar" },
+          { q: "It was cold outside, so she wore her ______.", t: "letters", a: "jacket" },
+          { q: "He wrapped the ______ for his friend’s birthday.", t: "letters", a: "gift" },
+          { q: "They told a spooky story about a wandering ______.", t: "letters", a: "ghost" },
+          { q: "We played a fun board ______ after dinner.", t: "letters", a: "game" },
+          { q: "That dog is quite ______ compared to the puppy.", t: "letters", a: "big" },
+          { q: "The ______ sped down the runway and took off.", t: "letters", a: "jet" },
+          { q: "I read a ______ before going to sleep.", t: "letters", a: "book" },
+          { q: "My dad loves to ______ pancakes for breakfast.", t: "letters", a: "cook" },
+          { q: "The house was built with sturdy ______.", t: "letters", a: "wood" },
+          { q: "The ______ shone brightly in the night sky.", t: "letters", a: "moon" },
+          { q: "She stirred her soup with a large ______.", t: "letters", a: "spoon" },
+          { q: "We bought fresh ______ at the grocery store.", t: "letters", a: "food" },
+          { q: "After running all day, my ______ began to ache.", t: "letters", a: "foot" }
         ]
       },
+
+      // SECTION 2 - rhymes (unchanged)
       rhymes: {
         title: "Section 2: Which Word Rhymes With…",
-        tip: "💡 Tip: Listen to the sound of the word and choose the option that best rhymes. Consider near rhymes as well.",
+        tip: "💡 Tip: Listen to the sound of the word and choose the option that best rhymes.",
         exercises: [
           { q: '1. Which word rhymes with "join"?', o: ["pie", "coin", "cook"], a: "coin" },
           { q: '2. Which word rhymes with "toy"?', o: ["cowboy", "foot", "jar"], a: "cowboy" },
@@ -523,6 +596,8 @@
           { q: '21. Which word rhymes with "put"?', o: ["foot", "ghost", "five"], a: "foot" }
         ]
       },
+
+      // SECTION 3 - circle and write (unchanged)
       circleAndWrite: {
         title: "Section 3: Circle and Write the Word",
         tip: "💡 Tip: Choose the correct word from the options and write it clearly in the blank.",
@@ -550,46 +625,129 @@
           { q: "21. My ______ hurts after walking all day.", o: ["foot", "tie", "cook"], a: "foot" }
         ]
       },
+
+      // SECTION 4 - multi-selection, but NO emojis in the question text
       phonicsSpelling: {
         title: "Section 4: Phonics and Spelling Patterns",
         tip: "💡 Tip: Focus on the sounds and spellings. Use each vocabulary word to answer the questions.",
         exercises: [
-          { q: "1. Which 3 words contain the short “oo” sound (as in “hook”)?", t: "text", a: "" },
-          { q: "2. Which 3 words contain the long “oo” sound (as in “boot”)?", t: "text", a: "" },
-          { q: "3. Which 2 words have the // sound spelled “oi”?", t: "text", a: "" },
-          { q: "4. Which 4 words end with a silent “e”?", t: "text", a: "" },
-          { q: "5. Which 3 words begin with the letters “j” or “ja”?", t: "text", a: "" },
-          { q: "6. Which 3 words begin with “co”?", t: "text", a: "" },
-          { q: "7. Which 2 words are typically used to stir or store things in the kitchen?", t: "text", a: "" },
-          { q: "8. Which word is a body part used for walking?", t: "text", a: "" },
-          { q: "9. Which word means a present or something you give someone?", t: "text", a: "" },
-          { q: "10. Which word is a sweet, round dessert often baked with fruit?", t: "text", a: "" },
-          { q: "11. Which word is the material from trees and is used for building?", t: "text", a: "" },
-          { q: "12. Which word refers to a spooky figure said to haunt houses?", t: "text", a: "" },
-          { q: "13. Which word is worn around your neck with a dress shirt?", t: "text", a: "" },
-          { q: "14. Which word refers to a large airplane?", t: "text", a: "" },
-          { q: "15. Which 2 words can describe something you read or do for fun? (One for reading, one for playing)", t: "text", a: "" },
-          { q: "16. Which word is used to prepare a meal?", t: "text", a: "" },
-          { q: "17. Which word is an amount of money made of metal?", t: "text", a: "" },
-          { q: "18. Which word is a type of job for a Western rider?", t: "text", a: "" },
-          { q: "19. Which word is a short word for “very large”?", t: "text", a: "" },
-          { q: "20. Which word can be a sweet frozen cube that melts in heat?", t: "text", a: "" },
-          { q: "21. Which word means “nourishment” or “things we eat”?", t: "text", a: "" }
+          {
+            q: "1. Which 3 words contain the short “oo” sound (as in “hook”)?",
+            t: "multiselect",
+            a: ["book", "cook", "foot"]
+          },
+          {
+            q: "2. Which 3 words contain the long “oo” sound (as in “boot”)?",
+            t: "multiselect",
+            a: ["moon", "spoon", "food"]
+          },
+          {
+            q: "3. Which 2 words have the “oi” sound spelled “oi”?",
+            t: "multiselect",
+            a: ["coin", "oil"]
+          },
+          {
+            q: "4. Which 4 words end with a silent “e”?",
+            t: "multiselect",
+            a: ["pie", "tie", "five", "game"]
+          },
+          {
+            q: "5. Which 3 words begin with the letters “j” or “ja”?",
+            t: "multiselect",
+            a: ["jar", "jacket", "jet"]
+          },
+          {
+            q: "6. Which 3 words begin with “co”?",
+            t: "multiselect",
+            a: ["coin", "cowboy", "cook"]
+          },
+          {
+            q: "7. Which 2 words are typically used to stir or store things in the kitchen?",
+            t: "multiselect",
+            a: ["spoon", "jar"]
+          },
+          {
+            q: "8. Which word is a body part used for walking?",
+            t: "multiselect",
+            a: ["foot"]
+          },
+          {
+            q: "9. Which word means a present or something you give someone?",
+            t: "multiselect",
+            a: ["gift"]
+          },
+          {
+            q: "10. Which word is a sweet, round dessert often baked with fruit?",
+            t: "multiselect",
+            a: ["pie"]
+          },
+          {
+            q: "11. Which word is the material from trees and is used for building?",
+            t: "multiselect",
+            a: ["wood"]
+          },
+          {
+            q: "12. Which word refers to a spooky figure said to haunt houses?",
+            t: "multiselect",
+            a: ["ghost"]
+          },
+          {
+            q: "13. Which word is worn around your neck with a dress shirt?",
+            t: "multiselect",
+            a: ["tie"]
+          },
+          {
+            q: "14. Which word refers to a large airplane?",
+            t: "multiselect",
+            a: ["jet"]
+          },
+          {
+            q: "15. Which 2 words can describe something you read or do for fun? (One for reading, one for playing)",
+            t: "multiselect",
+            a: ["book", "game"]
+          },
+          {
+            q: "16. Which word is used to prepare a meal?",
+            t: "multiselect",
+            a: ["cook"]
+          },
+          {
+            q: "17. Which word is an amount of money made of metal?",
+            t: "multiselect",
+            a: ["coin"]
+          },
+          {
+            q: "18. Which word is a type of job for a Western rider?",
+            t: "multiselect",
+            a: ["cowboy"]
+          },
+          {
+            q: "19. Which word is a short word for “very large”?",
+            t: "multiselect",
+            a: ["big"]
+          },
+          {
+            q: "20. Which word can be a sweet frozen cube that melts in heat?",
+            t: "multiselect",
+            a: ["ice"]
+          },
+          {
+            q: "21. Which word means “nourishment” or “things we eat”?",
+            t: "multiselect",
+            a: ["food"]
+          }
         ]
       },
+
+      // SECTION 5 - dictation
       dictation: {
         title: "Section 5: Dictation",
-        tip: "💡 Tip: Listen carefully as you read the passage aloud. Use proper intonation and pace.",
-        texts: [
-          "Today, the 🤠 cowboy rode his horse and paid with a shiny 🪙 coin for a delicious 🥧 pie. He wore a fancy 👔 tie and kept his 🧊 ice in a 🍯 jar. At age 5️⃣, he loved to fry vegetables and 🍳 cook pancakes, wearing his 🧥 jacket and carrying a 🎁 gift for a friendly 👻 ghost. Later, he played a fun 🎮 game, saw a big 🦖 jet, read a 📚 book, and admired a sturdy 🪵 wood house under the glowing 🌙 moon while a 🥄 spoon stirred tasty 🍽️ food—even as his 🦶 foot tired.",
-          "In the small town, a 🤠 cowboy used a 🪙 coin to buy a warm 🥧 pie. Dressed in a neat 👔 tie and 🧥 jacket, he stored 🧊 ice in a 🍯 jar and loved to fry eggs since he was 5️⃣. He gave a 🎁 gift to a mysterious 👻 ghost, enjoyed a lively 🎮 game, and watched an ✈️ jet soar. He also read a 📚 book and learned to 🍳 cook using a sturdy 🪵 wood oven, as a 🥄 spoon stirred his 🍽️ food while his 🦶 foot marched along under the 🌙 moon.",
-          "The brave 🤠 cowboy, armed with a 🪙 coin, treated himself to a scrumptious 🥧 pie while wearing a stylish 👔 tie and 🧥 jacket. At just 5️⃣ years old, he learned to fry food and 🍳 cook his meals, keeping his 🧊 ice fresh in a 🍯 jar. He presented a 🎁 gift to a gentle 👻 ghost, played an exciting 🎮 game, saw an ✈️ jet fly overhead, and read a 📚 book by a wooden 🪵 bench under the shining 🌙 moon. A 🥄 spoon stirred his 🍽️ food as his 🦶 foot tapped to the rhythm of the day."
-        ]
+        tip: "💡 Tip: Read the sentence carefully and practice writing it down correctly. Click 'Choose Random Text' to get a new sentence."
       }
     };
 
     /*************************************************************
-     * Helper: Shuffle Array
+     * Shuffle Array Helper
      *************************************************************/
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -599,8 +757,32 @@
       return array;
     }
 
-    // Fallback emoji options if no specific emoji is available
-    const emojiOptions = ["😊", "👍", "🌟", "🎉", "💡", "🚀"];
+    // Fallback emojis for the menu button headings, etc.
+    const fallbackEmojis = ["😊", "👍", "🌟", "🎉", "💡", "🚀"];
+
+    /*************************************************************
+     * Generate a Random Dictation Sentence (Section 5)
+     *************************************************************/
+    function generateDictationText() {
+      const vocabWords = [...allVocabulary];
+      shuffleArray(vocabWords);
+      // pick 2 distinct words
+      const pair = vocabWords.slice(0, 2);
+      const templates = [
+        "We discovered a {0} hiding next to the {1} during art class.",
+        "Our teacher explained how a {0} might help us use the {1} properly.",
+        "During recess, a {0} and a {1} became an unexpected pair!",
+        "They showed us a {0} that worked nicely with a {1} in science lab.",
+        "After reading time, we placed the {0} on the same shelf as the {1}.",
+        "The library had a display featuring a {0} and a {1} side by side.",
+        "No one guessed a {0} could stay so close to a {1} for so long.",
+        "We drew pictures of the {0} along with the {1} for our bulletin board.",
+        "Our class project involved comparing a {0} to a {1} in a fun story.",
+        "He was amazed to learn how a {0} could fit inside a {1} so easily!"
+      ];
+      const template = templates[Math.floor(Math.random() * templates.length)];
+      return template.replace("{0}", pair[0]).replace("{1}", pair[1]);
+    }
 
     /*************************************************************
      * Initialize Menu
@@ -614,9 +796,9 @@
         const section = exam[key];
         const button = document.createElement("button");
         button.classList.add("menu-btn");
-        button.innerHTML = `<div style="text-align:center;">
-                              <div style="font-weight:bold;">${section.title} ${emojiOptions[Math.floor(Math.random()*emojiOptions.length)]}</div>
-                            </div>`;
+        // For non-dictation sections, also show a fallback emoji
+        const btnLabel = section.title + (key === "dictation" ? "" : " " + fallbackEmojis[Math.floor(Math.random() * fallbackEmojis.length)]);
+        button.innerHTML = `<div style="text-align:center; font-weight:bold;">${btnLabel}</div>`;
         button.setAttribute("data-section", key);
         button.setAttribute("aria-label", section.title);
         menuGrid.appendChild(button);
@@ -629,7 +811,7 @@
     }
     
     /*************************************************************
-     * Show a Section (Exam Lesson)
+     * Show a Section
      *************************************************************/
     function showSection(sectionKey) {
       const sectionData = exam[sectionKey];
@@ -647,49 +829,74 @@
         hideTipPanel();
       }
     
-      // Special handling for Dictation: randomly select one text for teacher reading
+      // If Dictation
       if (sectionKey === "dictation") {
-        const randomIndex = Math.floor(Math.random() * sectionData.texts.length);
-        const randomText = sectionData.texts[randomIndex];
         lessonSection.innerHTML = `
           <button class="back-btn">⬅️ Back</button>
-          <h2>${sectionData.title} ${emojiOptions[Math.floor(Math.random()*emojiOptions.length)]}</h2>
-          ${sectionData.explanation || ""}
-          <div class="dictation-text" style="padding:1rem; border: 2px dashed #aaa; border-radius:8px; margin-top:1rem;">
-            <p>${randomText}</p>
+          <h2>${sectionData.title}</h2>
+          <div class="dictation-text" style="padding:1rem; border: 2px dashed #aaa; border-radius:8px; margin-top:1rem; font-size:125%;">
+            <p id="dictation-content">${generateDictationText()}</p>
+            <button id="choose-text-btn" class="submit-btn" style="margin-top:1rem;">Choose Random Text</button>
           </div>
         `;
+        document.querySelector(".back-btn").addEventListener("click", () => {
+          lessonSection.classList.remove("active");
+          lessonSection.style.display = "none";
+          welcomeSection.classList.add("active");
+          hideTipPanel();
+        });
+        document.getElementById("choose-text-btn").addEventListener("click", () => {
+          document.getElementById("dictation-content").innerText = generateDictationText();
+        });
         return;
       }
     
-      // For other sections, shuffle the exercises
+      // Shuffle the exercises for random order
       shuffleArray(sectionData.exercises);
     
+      // Build out the lesson content
       lessonSection.innerHTML = `
         <button class="back-btn">⬅️ Back</button>
-        <h2>${sectionData.title} ${emojiOptions[Math.floor(Math.random()*emojiOptions.length)]}</h2>
-        ${sectionData.explanation || ""}
+        <h2>${sectionData.title} ${fallbackEmojis[Math.floor(Math.random() * fallbackEmojis.length)]}</h2>
+        <div class="explanation">${sectionData.explanation || ""}</div>
         <div class="exercises">
           ${sectionData.exercises.map((ex, idx) => {
-              // Use specific emoji if the answer matches a vocab key; otherwise use a random fallback.
-              const specificEmoji = (ex.a && vocabEmojis[ex.a.toLowerCase()]) 
-                ? vocabEmojis[ex.a.toLowerCase()] 
-                : emojiOptions[Math.floor(Math.random()*emojiOptions.length)];
-              if (ex.o) {
-                shuffleArray(ex.o);
+              let showEmoji = "";
+              
+              // SECTION 1 => show item-based emoji
+              if (sectionKey === "fillInTheBlanks") {
+                // single correct answer
+                const word = ex.a.toLowerCase();
+                if (vocabEmojis[word]) {
+                  showEmoji = vocabEmojis[word];
+                }
+                else {
+                  showEmoji = "";
+                }
+              }
+              // SECTION 4 => remove emojis
+              else if (sectionKey === "phonicsSpelling") {
+                showEmoji = "";
+              }
+              // SECTION 2, 3 => no item-based emojis (we do fallback or nothing).
+              else if (sectionKey === "rhymes" || sectionKey === "circleAndWrite") {
+                showEmoji = "";
+              }
+
+              // Build the question layout
+              if (ex.t === "letters") {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${specificEmoji} ${ex.q}</p>
-                    <div class="options-grid">
-                      ${ex.o.map(opt => `<button class="option-btn" data-answer="${opt.toLowerCase()}">${opt}</button>`).join("")}
-                    </div>
+                    <p>${showEmoji} ${ex.q}</p>
+                    <div class="letters-grid" data-answer="${ex.a.toLowerCase()}"></div>
                     <div class="feedback" style="display:none;"></div>
                   </div>
                 `;
-              } else if (ex.t === "text") {
+              }
+              else if (ex.t === "text") {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${specificEmoji} ${ex.q}</p>
+                    <p>${showEmoji} ${ex.q}</p>
                     <div class="options-grid">
                       <input type="text" class="text-input" placeholder="Type your answer">
                       <button class="submit-btn">Submit</button>
@@ -697,19 +904,41 @@
                     <div class="feedback" style="display:none;"></div>
                   </div>
                 `;
-              } else {
+              }
+              else if (ex.t === "multiselect") {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${specificEmoji} ${ex.q}</p>
+                    <p>${showEmoji} ${ex.q}</p>
+                    <div class="multiselect-grid"></div>
+                    <button class="submit-btn" style="margin-top:0.5rem;">Submit</button>
                     <div class="feedback" style="display:none;"></div>
                   </div>
                 `;
               }
-            }).join("")
-          }
+              else if (ex.o) {
+                shuffleArray(ex.o);
+                return `
+                  <div class="exercise-card" data-exercise-index="${idx}">
+                    <p>${showEmoji} ${ex.q}</p>
+                    <div class="options-grid">
+                      ${ex.o.map(opt => `<button class="option-btn" data-answer="${opt.toLowerCase()}">${opt}</button>`).join("")}
+                    </div>
+                    <div class="feedback" style="display:none;"></div>
+                  </div>
+                `;
+              } else {
+                return `
+                  <div class="exercise-card" data-exercise-index="${idx}">
+                    <p>${showEmoji} ${ex.q}</p>
+                    <div class="feedback" style="display:none;"></div>
+                  </div>
+                `;
+              }
+            }).join("")}
         </div>
       `;
     
+      // Back button
       document.querySelector(".back-btn").addEventListener("click", () => {
         lessonSection.classList.remove("active");
         lessonSection.style.display = "none";
@@ -721,13 +950,153 @@
     }
     
     /*************************************************************
-     * Attach Listeners for Exercises
+     * Attach Listeners
      *************************************************************/
     function attachExerciseListeners(sectionKey) {
       const sectionData = exam[sectionKey];
       const lessonSection = document.querySelector(".lesson-section");
-    
-      // Multiple-choice
+
+      // SECTION 1: letter selection
+      if (sectionKey === "fillInTheBlanks") {
+        const letterExercises = lessonSection.querySelectorAll(".exercise-card");
+        letterExercises.forEach(card => {
+          const exIndex = parseInt(card.getAttribute("data-exercise-index"));
+          const exData = sectionData.exercises[exIndex];
+          if (exData.t === "letters") {
+            const correctWord = exData.a.trim().toLowerCase();
+            const lettersContainer = card.querySelector(".letters-grid");
+            const feedback = card.querySelector(".feedback");
+            
+            const correctLetters = correctWord.split("");
+            const numTraps = 3;
+            const allPossible = "abcdefghijklmnopqrstuvwxyz".split("");
+            let trapLetters = [];
+            while (trapLetters.length < numTraps) {
+              const randLetter = allPossible[Math.floor(Math.random() * allPossible.length)];
+              const totalOccurInCorrect = correctLetters.filter(l => l === randLetter).length;
+              const currentOccurInTrap = trapLetters.filter(l => l === randLetter).length;
+              if (totalOccurInCorrect === 0 && currentOccurInTrap === 0) {
+                trapLetters.push(randLetter);
+              }
+            }
+            const letterPool = [...correctLetters, ...trapLetters];
+            shuffleArray(letterPool);
+
+            let nextLetterIndex = 0;
+            
+            letterPool.forEach(letter => {
+              const btn = document.createElement("button");
+              btn.classList.add("letter-btn");
+              btn.textContent = letter;
+              btn.addEventListener("click", () => {
+                if (letter === correctLetters[nextLetterIndex]) {
+                  btn.style.backgroundColor = "#C8F7C5";
+                  btn.style.borderColor = "#2ECC71";
+                  btn.disabled = true;
+                  nextLetterIndex++;
+                  if (nextLetterIndex >= correctLetters.length) {
+                    feedback.style.display = "block";
+                    feedback.innerHTML = `✅ Correct! The word was "${exData.a}".`;
+                    feedback.classList.add("correct");
+                    feedback.classList.remove("incorrect");
+                    lettersContainer.querySelectorAll(".letter-btn").forEach(b => (b.disabled = true));
+                  }
+                } else {
+                  btn.style.backgroundColor = "#FFD8D2";
+                  btn.style.borderColor = "#E74C3C";
+                  setTimeout(() => {
+                    btn.style.backgroundColor = "#FFFFFF";
+                    btn.style.borderColor = "var(--secondary)";
+                  }, 500);
+                }
+              });
+              lettersContainer.appendChild(btn);
+            });
+          }
+        });
+      }
+
+      // SECTION 4: multi-selection (no emojis in question text)
+      if (sectionKey === "phonicsSpelling") {
+        const multiExercises = lessonSection.querySelectorAll(".exercise-card");
+        multiExercises.forEach(card => {
+          const exIndex = parseInt(card.getAttribute("data-exercise-index"));
+          const exData = sectionData.exercises[exIndex];
+          if (exData.t === "multiselect") {
+            const grid = card.querySelector(".multiselect-grid");
+            const feedback = card.querySelector(".feedback");
+            const submitBtn = card.querySelector(".submit-btn");
+
+            // Up to 6 possible answers (correct answers + trap words)
+            const correctAnswers = Array.isArray(exData.a) ? exData.a : [exData.a];
+            const numberOfTrapsToAdd = Math.max(0, 6 - correctAnswers.length); 
+            shuffleArray(trapWords);
+            const chosenTraps = trapWords.slice(0, numberOfTrapsToAdd);
+
+            const possibleAnswers = [...correctAnswers, ...chosenTraps];
+            shuffleArray(possibleAnswers);
+
+            possibleAnswers.forEach(word => {
+              const itemDiv = document.createElement("div");
+              itemDiv.classList.add("multiselect-item");
+              itemDiv.innerHTML = `
+                <input type="checkbox" value="${word}">
+                <label>${word}</label>
+              `;
+              itemDiv.addEventListener("click", (e) => {
+                if (e.target.tagName.toLowerCase() !== "input") {
+                  const checkbox = itemDiv.querySelector("input[type='checkbox']");
+                  checkbox.checked = !checkbox.checked;
+                }
+                itemDiv.classList.toggle("selected", itemDiv.querySelector("input").checked);
+              });
+              grid.appendChild(itemDiv);
+            });
+
+            submitBtn.addEventListener("click", () => {
+              const checkedBoxes = grid.querySelectorAll("input[type='checkbox']:checked");
+              const selectedWords = Array.from(checkedBoxes).map(cb => cb.value);
+
+              const correctSet = new Set(correctAnswers);
+              const selectedSet = new Set(selectedWords);
+
+              let isCorrect = (correctSet.size === selectedSet.size);
+              if (isCorrect) {
+                for (let word of correctSet) {
+                  if (!selectedSet.has(word)) {
+                    isCorrect = false;
+                    break;
+                  }
+                }
+              }
+
+              feedback.style.display = "block";
+              if (isCorrect) {
+                feedback.innerHTML = `✅ Correct! Good job.`;
+                feedback.classList.add("correct");
+                feedback.classList.remove("incorrect");
+                submitBtn.disabled = true;
+                grid.querySelectorAll("input[type='checkbox']").forEach(cb => cb.disabled = true);
+              } else {
+                feedback.innerHTML = `❌ Incorrect! The correct answer(s): ${correctAnswers.join(", ")} <br>
+                  <button class="try-again-btn">Try Again</button>`;
+                feedback.classList.add("incorrect");
+                feedback.classList.remove("correct");
+                feedback.querySelector(".try-again-btn").addEventListener("click", () => {
+                  feedback.style.display = "none";
+                  grid.querySelectorAll("input[type='checkbox']").forEach(cb => {
+                    cb.checked = false;
+                    cb.disabled = false;
+                    cb.closest(".multiselect-item")?.classList.remove("selected");
+                  });
+                });
+              }
+            });
+          }
+        });
+      }
+
+      // SECTION 2 & 3: multiple-choice approach
       lessonSection.querySelectorAll(".option-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const exerciseCard = btn.closest(".exercise-card");
@@ -761,49 +1130,51 @@
           }
         });
       });
-    
-      // Text Input
+
+      // Text input approach (if any)
       lessonSection.querySelectorAll(".submit-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const exerciseCard = btn.closest(".exercise-card");
-          const feedback = exerciseCard.querySelector(".feedback");
-          let input = exerciseCard.querySelector(".text-input");
-          const exIndex = parseInt(exerciseCard.getAttribute("data-exercise-index"));
-          const exData = sectionData.exercises[exIndex];
-          const correctAnswer = exData.a.trim().toLowerCase();
-          const userAnswer = input.value.trim().toLowerCase();
+        const exerciseCard = btn.closest(".exercise-card");
+        if (exerciseCard && exerciseCard.querySelector(".text-input")) {
+          btn.addEventListener("click", () => {
+            const feedback = exerciseCard.querySelector(".feedback");
+            const input = exerciseCard.querySelector(".text-input");
+            const exIndex = parseInt(exerciseCard.getAttribute("data-exercise-index"));
+            const exData = sectionData.exercises[exIndex];
+            const correctAnswer = exData.a.trim().toLowerCase();
+            const userAnswer = input.value.trim().toLowerCase();
     
-          feedback.style.display = "block";
-          if (!userAnswer) {
-            feedback.innerHTML = "❗ Please type an answer.";
-            feedback.classList.add("incorrect");
-            feedback.classList.remove("correct");
-            return;
-          }
+            feedback.style.display = "block";
+            if (!userAnswer) {
+              feedback.innerHTML = "❗ Please type an answer.";
+              feedback.classList.add("incorrect");
+              feedback.classList.remove("correct");
+              return;
+            }
     
-          if (userAnswer === correctAnswer) {
-            feedback.innerHTML = `✅ Correct! 🎉`;
-            feedback.classList.add("correct");
-            feedback.classList.remove("incorrect");
-            input.disabled = true;
-            btn.disabled = true;
-            input.style.opacity = "0.6";
-            btn.style.opacity = "0.6";
-          } else {
-            feedback.innerHTML = `❌ Incorrect! The correct answer is: "${exData.a}".<br>
-              <button class="try-again-btn">Try Again</button>`;
-            feedback.classList.add("incorrect");
-            feedback.classList.remove("correct");
-            feedback.querySelector(".try-again-btn").addEventListener("click", () => {
-              feedback.style.display = "none";
-              input.disabled = false;
-              btn.disabled = false;
-              input.style.opacity = "1";
-              btn.style.opacity = "1";
-              input.value = "";
-            });
-          }
-        });
+            if (userAnswer === correctAnswer) {
+              feedback.innerHTML = `✅ Correct! 🎉`;
+              feedback.classList.add("correct");
+              feedback.classList.remove("incorrect");
+              input.disabled = true;
+              btn.disabled = true;
+              input.style.opacity = "0.6";
+              btn.style.opacity = "0.6";
+            } else {
+              feedback.innerHTML = `❌ Incorrect! The correct answer is: "${exData.a}".<br>
+                <button class="try-again-btn">Try Again</button>`;
+              feedback.classList.add("incorrect");
+              feedback.classList.remove("correct");
+              feedback.querySelector(".try-again-btn").addEventListener("click", () => {
+                feedback.style.display = "none";
+                input.disabled = false;
+                btn.disabled = false;
+                input.style.opacity = "1";
+                btn.style.opacity = "1";
+                input.value = "";
+              });
+            }
+          });
+        }
       });
     }
     

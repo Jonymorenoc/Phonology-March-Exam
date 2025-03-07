@@ -6,16 +6,13 @@
   <title>Second Grade Vocabulary Exam</title>
 
   <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Inline Styles (same style as before) -->
+  <!-- Inline Styles (Same design as before) -->
   <style>
     :root {
-      --primary: #2A4270; /* Dark Blue */
-      --secondary: #FF693A; /* Bright Orange */
+      --primary: #2A4270;
+      --secondary: #FF693A;
       --accent: #FF693A;
       --background: #F6F4EE;
       --text-dark: #000000;
@@ -48,7 +45,6 @@
       min-height: 100vh;
     }
     
-    /* Header */
     header {
       text-align: center;
       margin-bottom: 2rem;
@@ -70,7 +66,6 @@
       animation: bounce 2s infinite;
     }
     
-    /* “Choose Your Section!” Bubble */
     .bubble {
       background: rgba(255, 105, 58, 0.1);
       border: 2px solid var(--secondary);
@@ -87,7 +82,6 @@
       max-width: 600px;
     }
     
-    /* Section Buttons Grid */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -184,7 +178,8 @@
       opacity: 0.6;
     }
     
-    .text-input, textarea {
+    .text-input,
+    textarea {
       padding: 0.8rem;
       border: 2px solid var(--secondary);
       border-radius: 8px;
@@ -418,12 +413,10 @@
     </header>
 
     <main class="content">
-      <!-- Welcome / Menu Section -->
+      <!-- Menu Section -->
       <section class="welcome active">
         <div class="bubble">🎈 Choose Your Exam Section! 👇</div>
-        <div class="menu-grid">
-          <!-- Buttons generated from exam sections -->
-        </div>
+        <div class="menu-grid"></div>
       </section>
 
       <!-- Exam Section Details -->
@@ -435,28 +428,23 @@
     </footer>
   </div>
 
-  <!-- Collapsible Tip Panel (if needed) -->
+  <!-- Collapsible Tip Panel -->
   <div id="tip-panel" class="tip-panel closed">
     <div class="tip-toggle-bar" id="tip-toggle-bar">
       <span id="tip-toggle-text">Show Tip</span>
     </div>
-    <div class="tip-content" id="tip-content">
-      <!-- Tip content injected via script if necessary -->
-    </div>
+    <div class="tip-content" id="tip-content"></div>
   </div>
 
   <!-- Inline Script -->
   <script>
     /*************************************************************
-     * Exam Data (5 Sections with 21 exercises each, where applicable)
+     * Exam Data with Tips and Dictation Texts
      *************************************************************/
     const exam = {
       fillInTheBlanks: {
         title: "Section 1: Fill in the Blanks",
-        explanation: `<div class="explanation">
-          <h3>Fill in the Blanks</h3>
-          <p>Fill in each blank with the correct word. Use each word exactly once.</p>
-        </div>`,
+        tip: "💡 Tip: Read the sentence carefully and fill in the blank using context. Use each word exactly once.",
         exercises: [
           { q: "1. He paid with a shiny ______ to buy a snack.", t: "text", a: "coin" },
           { q: "2. The brave ______ rode his horse through the desert.", t: "text", a: "cowboy" },
@@ -478,16 +466,12 @@
           { q: "18. The ______ shone brightly in the night sky.", t: "text", a: "moon" },
           { q: "19. She stirred her soup with a large ______.", t: "text", a: "spoon" },
           { q: "20. We bought fresh ______ at the grocery store.", t: "text", a: "food" },
-          { q: "21. After running all day, my ______ began to ache.", t: "text", a: "foot" },
+          { q: "21. After running all day, my ______ began to ache.", t: "text", a: "foot" }
         ]
       },
-
       rhymes: {
         title: "Section 2: Which Word Rhymes With…",
-        explanation: `<div class="explanation">
-          <h3>Rhyming Words</h3>
-          <p>Choose the correct word that best rhymes with the given word. Each vocabulary word is used once.</p>
-        </div>`,
+        tip: "💡 Tip: Listen to the sound of the word and choose the option that best rhymes. Consider near rhymes as well.",
         exercises: [
           { q: '1. Which word rhymes with "join"?', o: ["pie", "coin", "cook"], a: "coin" },
           { q: '2. Which word rhymes with "toy"?', o: ["cowboy", "foot", "jar"], a: "cowboy" },
@@ -509,16 +493,12 @@
           { q: '18. Which word rhymes with "tune"?', o: ["tie", "cowboy", "moon"], a: "moon" },
           { q: '19. Which word rhymes with "balloon"?', o: ["spoon", "jar", "big"], a: "spoon" },
           { q: '20. Which word rhymes with "mood"?', o: ["food", "foot", "game"], a: "food" },
-          { q: '21. Which word rhymes with "put"?', o: ["foot", "ghost", "five"], a: "foot" },
+          { q: '21. Which word rhymes with "put"?', o: ["foot", "ghost", "five"], a: "foot" }
         ]
       },
-
       circleAndWrite: {
         title: "Section 3: Circle and Write the Word",
-        explanation: `<div class="explanation">
-          <h3>Circle and Write</h3>
-          <p>Choose the correct word from (a), (b), or (c) then write it in the blank.</p>
-        </div>`,
+        tip: "💡 Tip: Choose the correct word from the options and write it clearly in the blank.",
         exercises: [
           { q: "1. He dropped a small ______ into the fountain.", o: ["cowboy", "coin", "game"], a: "coin" },
           { q: "2. My cousin wants to be a ______ and ride horses.", o: ["cowboy", "jet", "jar"], a: "cowboy" },
@@ -540,16 +520,12 @@
           { q: "18. The ______ shone brightly in the sky last night.", o: ["spoon", "jacket", "moon"], a: "moon" },
           { q: "19. He stirred the soup with a wooden ______.", o: ["spoon", "foot", "game"], a: "spoon" },
           { q: "20. We bought some ______ at the market for dinner.", o: ["foot", "food", "ghost"], a: "food" },
-          { q: "21. My ______ hurts after walking all day.", o: ["foot", "tie", "cook"], a: "foot" },
+          { q: "21. My ______ hurts after walking all day.", o: ["foot", "tie", "cook"], a: "foot" }
         ]
       },
-
       phonicsSpelling: {
         title: "Section 4: Phonics and Spelling Patterns",
-        explanation: `<div class="explanation">
-          <h3>Phonics and Spelling Patterns</h3>
-          <p>Answer the questions below. Use each of the 21 words at least once.</p>
-        </div>`,
+        tip: "💡 Tip: Focus on the sounds and spellings. Use each vocabulary word to answer the questions.",
         exercises: [
           { q: "1. Which 3 words contain the short “oo” sound (as in “hook”)?", t: "text", a: "" },
           { q: "2. Which 3 words contain the long “oo” sound (as in “boot”)?", t: "text", a: "" },
@@ -571,38 +547,16 @@
           { q: "18. Which word is a type of job for a Western rider?", t: "text", a: "" },
           { q: "19. Which word is a short word for “very large”?", t: "text", a: "" },
           { q: "20. Which word can be a sweet frozen cube that melts in heat?", t: "text", a: "" },
-          { q: "21. Which word means “nourishment” or “things we eat”?", t: "text", a: "" },
+          { q: "21. Which word means “nourishment” or “things we eat”?", t: "text", a: "" }
         ]
       },
-
       dictation: {
         title: "Section 5: Dictation",
-        explanation: `<div class="explanation">
-          <h3>Dictation</h3>
-          <p>Your teacher will read 21 sentences, each containing one of the words. Listen carefully and write each sentence.</p>
-        </div>`,
-        exercises: [
-          { q: "1.", t: "textarea", a: "" },
-          { q: "2.", t: "textarea", a: "" },
-          { q: "3.", t: "textarea", a: "" },
-          { q: "4.", t: "textarea", a: "" },
-          { q: "5.", t: "textarea", a: "" },
-          { q: "6.", t: "textarea", a: "" },
-          { q: "7.", t: "textarea", a: "" },
-          { q: "8.", t: "textarea", a: "" },
-          { q: "9.", t: "textarea", a: "" },
-          { q: "10.", t: "textarea", a: "" },
-          { q: "11.", t: "textarea", a: "" },
-          { q: "12.", t: "textarea", a: "" },
-          { q: "13.", t: "textarea", a: "" },
-          { q: "14.", t: "textarea", a: "" },
-          { q: "15.", t: "textarea", a: "" },
-          { q: "16.", t: "textarea", a: "" },
-          { q: "17.", t: "textarea", a: "" },
-          { q: "18.", t: "textarea", a: "" },
-          { q: "19.", t: "textarea", a: "" },
-          { q: "20.", t: "textarea", a: "" },
-          { q: "21.", t: "textarea", a: "" },
+        tip: "💡 Tip: Listen carefully as you read the passage aloud. Use proper intonation and pace.",
+        texts: [
+          "Today, the cowboy rode his horse and paid with a shiny coin for a delicious pie. He wore a fancy tie and kept his ice in a jar. At age five, he loved to fry vegetables and cook pancakes, wearing his jacket and carrying a gift for a friendly ghost. Later, he played a fun game, saw a big jet, read a book, and admired a wooden house under the glowing moon while a spoon stirred tasty food, even as his foot tired.",
+          "In the small town, a cowboy used a coin to buy a warm pie. Dressed in a neat tie and jacket, he stored ice in a jar and loved to fry eggs since he was five. He gave a gift to a mysterious ghost, enjoyed a lively game, and watched a big jet soar. He also read a book and learned to cook with wood-fired ovens, as a spoon stirred his food and his foot marched along under the moon.",
+          "The brave cowboy, armed with a coin, treated himself to a scrumptious pie while wearing a stylish tie and jacket. At just five years old, he learned to fry food and cook his meals, keeping his ice fresh in a jar. He presented a gift to a gentle ghost, played an exciting game, saw a big jet fly overhead, and read a book by a wooden bench under the shining moon. A spoon stirred his food as his foot tapped to the rhythm of the day."
         ]
       }
     };
@@ -618,6 +572,8 @@
       return array;
     }
 
+    const emojiOptions = ["😊", "👍", "🌟", "🎉", "💡", "🚀"];
+
     /*************************************************************
      * Initialize Menu
      *************************************************************/
@@ -626,13 +582,12 @@
     function initMenu() {
       const menuGrid = document.querySelector(".menu-grid");
       menuGrid.innerHTML = "";
-      // Create a button for each exam section
       for (let key in exam) {
         const section = exam[key];
         const button = document.createElement("button");
         button.classList.add("menu-btn");
         button.innerHTML = `<div style="text-align:center;">
-                              <div style="font-weight:bold;">${section.title}</div>
+                              <div style="font-weight:bold;">${section.title} ${emojiOptions[Math.floor(Math.random()*emojiOptions.length)]}</div>
                             </div>`;
         button.setAttribute("data-section", key);
         button.setAttribute("aria-label", section.title);
@@ -657,32 +612,53 @@
       lessonSection.classList.add("active");
       lessonSection.style.display = "block";
     
-      // Build exercises for the selected section
+      // Show tip from sectionData, if available
+      if (sectionData.tip) {
+        showTipPanel(sectionData.tip);
+      } else {
+        hideTipPanel();
+      }
+    
+      // Special handling for Dictation: randomly select one text for teacher reading
+      if (sectionKey === "dictation") {
+        const randomIndex = Math.floor(Math.random() * sectionData.texts.length);
+        const randomText = sectionData.texts[randomIndex];
+        lessonSection.innerHTML = `
+          <button class="back-btn">⬅️ Back</button>
+          <h2>${sectionData.title} ${emojiOptions[Math.floor(Math.random()*emojiOptions.length)]}</h2>
+          ${sectionData.explanation || ""}
+          <div class="dictation-text" style="padding:1rem; border: 2px dashed #aaa; border-radius:8px; margin-top:1rem;">
+            <p>${randomText}</p>
+          </div>
+        `;
+        return;
+      }
+    
+      // For other sections, randomize the exercises order
+      shuffleArray(sectionData.exercises);
+    
       lessonSection.innerHTML = `
         <button class="back-btn">⬅️ Back</button>
-        <h2>${sectionData.title}</h2>
+        <h2>${sectionData.title} ${emojiOptions[Math.floor(Math.random()*emojiOptions.length)]}</h2>
         ${sectionData.explanation || ""}
         <div class="exercises">
           ${sectionData.exercises.map((ex, idx) => {
-              // Multiple-choice exercise if options exist
+              const randEmoji = emojiOptions[Math.floor(Math.random()*emojiOptions.length)];
               if (ex.o) {
-                // Randomize options
                 shuffleArray(ex.o);
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${ex.q}</p>
+                    <p>${randEmoji} ${ex.q}</p>
                     <div class="options-grid">
                       ${ex.o.map(opt => `<button class="option-btn" data-answer="${opt.toLowerCase()}">${opt}</button>`).join("")}
                     </div>
                     <div class="feedback" style="display:none;"></div>
                   </div>
                 `;
-              }
-              // Text input exercise
-              else if (ex.t === "text") {
+              } else if (ex.t === "text") {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${ex.q}</p>
+                    <p>${randEmoji} ${ex.q}</p>
                     <div class="options-grid">
                       <input type="text" class="text-input" placeholder="Type your answer">
                       <button class="submit-btn">Submit</button>
@@ -690,24 +666,10 @@
                     <div class="feedback" style="display:none;"></div>
                   </div>
                 `;
-              }
-              // Textarea exercise (for Dictation)
-              else if (ex.t === "textarea") {
+              } else {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${ex.q}</p>
-                    <div class="options-grid">
-                      <textarea rows="3" placeholder="Type your answer here"></textarea>
-                      <button class="submit-btn">Submit</button>
-                    </div>
-                    <div class="feedback" style="display:none;"></div>
-                  </div>
-                `;
-              }
-              else {
-                return `
-                  <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${ex.q}</p>
+                    <p>${randEmoji} ${ex.q}</p>
                     <div class="feedback" style="display:none;"></div>
                   </div>
                 `;
@@ -717,7 +679,6 @@
         </div>
       `;
     
-      // Back button returns to menu
       document.querySelector(".back-btn").addEventListener("click", () => {
         lessonSection.classList.remove("active");
         lessonSection.style.display = "none";
@@ -725,20 +686,17 @@
         hideTipPanel();
       });
     
-      // For this exam, you may add tips (optional) or simply hide the tip panel
-      hideTipPanel();
-    
       attachExerciseListeners(sectionKey);
     }
     
     /*************************************************************
-     * Attach Listeners for All Exercises in a Section
+     * Attach Listeners for Exercises
      *************************************************************/
     function attachExerciseListeners(sectionKey) {
       const sectionData = exam[sectionKey];
       const lessonSection = document.querySelector(".lesson-section");
     
-      // Multiple-choice listeners
+      // Multiple-choice
       lessonSection.querySelectorAll(".option-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const exerciseCard = btn.closest(".exercise-card");
@@ -773,15 +731,12 @@
         });
       });
     
-      // Text input and Textarea listeners
+      // Text Input
       lessonSection.querySelectorAll(".submit-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const exerciseCard = btn.closest(".exercise-card");
           const feedback = exerciseCard.querySelector(".feedback");
           let input = exerciseCard.querySelector(".text-input");
-          if (!input) {
-            input = exerciseCard.querySelector("textarea");
-          }
           const exIndex = parseInt(exerciseCard.getAttribute("data-exercise-index"));
           const exData = sectionData.exercises[exIndex];
           const correctAnswer = exData.a.trim().toLowerCase();
@@ -822,7 +777,7 @@
     }
     
     /*************************************************************
-     * Tip Panel Functions (optional for exam sections)
+     * Tip Panel Functions
      *************************************************************/
     const tipPanel = document.getElementById("tip-panel");
     const tipToggleBar = document.getElementById("tip-toggle-bar");

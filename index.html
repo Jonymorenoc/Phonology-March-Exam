@@ -439,6 +439,33 @@
   <!-- Inline Script -->
   <script>
     /*************************************************************
+     * Vocabulary Emoji Mapping
+     *************************************************************/
+    const vocabEmojis = {
+      'coin': '🪙',
+      'cowboy': '🤠',
+      'pie': '🥧',
+      'tie': '👔',
+      'ice': '🧊',
+      'oil': '🛢️',
+      'five': '5️⃣',
+      'jar': '🍯',
+      'jacket': '🧥',
+      'gift': '🎁',
+      'ghost': '👻',
+      'game': '🎮',
+      'big': '🦖',
+      'jet': '✈️',
+      'book': '📚',
+      'cook': '🍳',
+      'wood': '🪵',
+      'moon': '🌙',
+      'spoon': '🥄',
+      'food': '🍽️',
+      'foot': '🦶'
+    };
+
+    /*************************************************************
      * Exam Data with Tips and Dictation Texts
      *************************************************************/
     const exam = {
@@ -554,9 +581,9 @@
         title: "Section 5: Dictation",
         tip: "💡 Tip: Listen carefully as you read the passage aloud. Use proper intonation and pace.",
         texts: [
-          "Today, the cowboy rode his horse and paid with a shiny coin for a delicious pie. He wore a fancy tie and kept his ice in a jar. At age five, he loved to fry vegetables and cook pancakes, wearing his jacket and carrying a gift for a friendly ghost. Later, he played a fun game, saw a big jet, read a book, and admired a wooden house under the glowing moon while a spoon stirred tasty food, even as his foot tired.",
-          "In the small town, a cowboy used a coin to buy a warm pie. Dressed in a neat tie and jacket, he stored ice in a jar and loved to fry eggs since he was five. He gave a gift to a mysterious ghost, enjoyed a lively game, and watched a big jet soar. He also read a book and learned to cook with wood-fired ovens, as a spoon stirred his food and his foot marched along under the moon.",
-          "The brave cowboy, armed with a coin, treated himself to a scrumptious pie while wearing a stylish tie and jacket. At just five years old, he learned to fry food and cook his meals, keeping his ice fresh in a jar. He presented a gift to a gentle ghost, played an exciting game, saw a big jet fly overhead, and read a book by a wooden bench under the shining moon. A spoon stirred his food as his foot tapped to the rhythm of the day."
+          "Today, the 🤠 cowboy rode his horse and paid with a shiny 🪙 coin for a delicious 🥧 pie. He wore a fancy 👔 tie and kept his 🧊 ice in a 🍯 jar. At age 5️⃣, he loved to fry vegetables and 🍳 cook pancakes, wearing his 🧥 jacket and carrying a 🎁 gift for a friendly 👻 ghost. Later, he played a fun 🎮 game, saw a big 🦖 jet, read a 📚 book, and admired a sturdy 🪵 wood house under the glowing 🌙 moon while a 🥄 spoon stirred tasty 🍽️ food—even as his 🦶 foot tired.",
+          "In the small town, a 🤠 cowboy used a 🪙 coin to buy a warm 🥧 pie. Dressed in a neat 👔 tie and 🧥 jacket, he stored 🧊 ice in a 🍯 jar and loved to fry eggs since he was 5️⃣. He gave a 🎁 gift to a mysterious 👻 ghost, enjoyed a lively 🎮 game, and watched an ✈️ jet soar. He also read a 📚 book and learned to 🍳 cook using a sturdy 🪵 wood oven, as a 🥄 spoon stirred his 🍽️ food while his 🦶 foot marched along under the 🌙 moon.",
+          "The brave 🤠 cowboy, armed with a 🪙 coin, treated himself to a scrumptious 🥧 pie while wearing a stylish 👔 tie and 🧥 jacket. At just 5️⃣ years old, he learned to fry food and 🍳 cook his meals, keeping his 🧊 ice fresh in a 🍯 jar. He presented a 🎁 gift to a gentle 👻 ghost, played an exciting 🎮 game, saw an ✈️ jet fly overhead, and read a 📚 book by a wooden 🪵 bench under the shining 🌙 moon. A 🥄 spoon stirred his 🍽️ food as his 🦶 foot tapped to the rhythm of the day."
         ]
       }
     };
@@ -572,6 +599,7 @@
       return array;
     }
 
+    // Fallback emoji options if no specific emoji is available
     const emojiOptions = ["😊", "👍", "🌟", "🎉", "💡", "🚀"];
 
     /*************************************************************
@@ -612,7 +640,7 @@
       lessonSection.classList.add("active");
       lessonSection.style.display = "block";
     
-      // Show tip from sectionData, if available
+      // Show tip if available
       if (sectionData.tip) {
         showTipPanel(sectionData.tip);
       } else {
@@ -634,7 +662,7 @@
         return;
       }
     
-      // For other sections, randomize the exercises order
+      // For other sections, shuffle the exercises
       shuffleArray(sectionData.exercises);
     
       lessonSection.innerHTML = `
@@ -643,12 +671,15 @@
         ${sectionData.explanation || ""}
         <div class="exercises">
           ${sectionData.exercises.map((ex, idx) => {
-              const randEmoji = emojiOptions[Math.floor(Math.random()*emojiOptions.length)];
+              // Use specific emoji if the answer matches a vocab key; otherwise use a random fallback.
+              const specificEmoji = (ex.a && vocabEmojis[ex.a.toLowerCase()]) 
+                ? vocabEmojis[ex.a.toLowerCase()] 
+                : emojiOptions[Math.floor(Math.random()*emojiOptions.length)];
               if (ex.o) {
                 shuffleArray(ex.o);
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${randEmoji} ${ex.q}</p>
+                    <p>${specificEmoji} ${ex.q}</p>
                     <div class="options-grid">
                       ${ex.o.map(opt => `<button class="option-btn" data-answer="${opt.toLowerCase()}">${opt}</button>`).join("")}
                     </div>
@@ -658,7 +689,7 @@
               } else if (ex.t === "text") {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${randEmoji} ${ex.q}</p>
+                    <p>${specificEmoji} ${ex.q}</p>
                     <div class="options-grid">
                       <input type="text" class="text-input" placeholder="Type your answer">
                       <button class="submit-btn">Submit</button>
@@ -669,7 +700,7 @@
               } else {
                 return `
                   <div class="exercise-card" data-exercise-index="${idx}">
-                    <p>${randEmoji} ${ex.q}</p>
+                    <p>${specificEmoji} ${ex.q}</p>
                     <div class="feedback" style="display:none;"></div>
                   </div>
                 `;
